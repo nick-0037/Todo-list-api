@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../jwt-auth/jwt-auth.guard';
 import { TodoService } from '../todo/todo.service';
-import { createDto, updateDto } from './todo.dto';
+import { CreateDto, UpdateDto } from './todo.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('todo')
@@ -21,23 +21,25 @@ export class TodoController {
   constructor(private todoService: TodoService) {}
 
   @Post()
-  create(@Body() createDto: createDto, @Req() req) {
+  create(@Body() createDto: CreateDto, @Req() req) {
     return this.todoService.create(createDto, req.user.userId);
   }
 
   @Get()
   findAll(
+    @Req() req,
     @Query('page') page: number,
     @Query('limit') limit: number,
-    @Req() req,
+    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
+    @Query('title') title?: string,
   ) {
-    return this.todoService.findAll(req.user.userId, page, limit);
+    return this.todoService.findAll(req.user.userId, page, limit, sortOrder, title);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateDto: updateDto,
+    @Body() updateDto: UpdateDto,
     @Req() req,
   ) {
     const updatedTodo = await this.todoService.update(
@@ -46,7 +48,7 @@ export class TodoController {
       req.user.userId,
     );
     return {
-      id: id,
+      id: Number(id),
       title: updatedTodo.title,
       description: updatedTodo.description,
     };

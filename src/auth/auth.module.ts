@@ -16,7 +16,7 @@ import { ConfigService } from '@nestjs/config';
         ignOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
-    })
+    }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

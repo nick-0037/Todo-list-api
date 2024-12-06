@@ -14,6 +14,9 @@ export class ToDo extends Document {
 
   @Prop({ required: true })
   userId: string;
+
+  @Prop({ required: true, default: Date.now })
+  createAt: Date;
 }
 
 const todoSchema = SchemaFactory.createForClass(ToDo);
