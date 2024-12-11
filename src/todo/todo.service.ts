@@ -35,9 +35,9 @@ export class TodoService {
     sortOrder: 'asc' | 'desc' = 'desc',
     title?: string 
   ) {
-    const filters: any = { userId }
+    const filters: any = { userId };
 
-    if (filters) filters['title'] = { $regex: title, $options: 'i' }
+    if (title) filters['title'] = { $regex: title, $options: 'i' }
 
     const sortDirection = sortOrder === 'asc' ? 1 : -1;
 
